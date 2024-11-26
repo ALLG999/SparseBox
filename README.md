@@ -1,5 +1,5 @@
 # SparseBox
-
+[![Build](https://github.com/136478738/SparseBox/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/136478738/SparseBox/actions/workflows/Build.yml)
 On-device backup restoration?
 设备上备份恢复？
 
