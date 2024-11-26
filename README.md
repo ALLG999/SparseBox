@@ -1,4 +1,4 @@
-## SparseBox
+![903eedffc599ce59649e2afd02c3814c](https://github.com/user-attachments/assets/c92443a9-9b1b-41c7-b81c-69a1f4562a64)## SparseBox
 [![Build](https://github.com/136478738/SparseBox/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/136478738/SparseBox/actions/workflows/Build.yml)
 
 On-device backup restoration?
@@ -11,7 +11,9 @@ On-device backup restoration?
 ## Installation 安装
 推荐使用[NB助手](https://nbtool8.com/index.html)
 
-汉化版本下载地址：[nightly.link](https://nightly.link/136478738/SparseBox/workflows/Build/main/artifact.zip)
+汉化版本SparseBox下载地址：[nightly.link](https://nightly.link/136478738/SparseBox/workflows/Build/main/artifact.zip)
+
+SparseBox相关工具下载地址：[123网盘](https://www.123pan.com/s/OnUlVv-yxeU3)
 
 下面是官方原文翻译
 
@@ -26,7 +28,7 @@ Download ipa from Actions tab or [nightly.link](https://nightly.link/khanhduytra
 
 Before opening SparseBox, you have to close SideStore from app switcher. This is because only one app can use VPN proxy at a time. Maybe changing port could solve this issue.
 
-在打开SparseBox之前，你必须从应用切换器关闭SideStore。这是因为一次只有一个应用程序可以使用VPN代理。也许改变端口可以解决这个问题
+在打开SparseBox之前，请在后台把SideStore彻底杀死。这是因为一次只有一个应用程序可以使用VPN代理。也许改变端口可以解决这个问题。注：SparseBox与SideStore不兼容，必须死一个！
 ## Thanks to 感谢下面的老哥：
 - @SideStore: em_proxy and minimuxer
 - @JJTech0130: SparseRestore and backup exploit
