@@ -1,4 +1,4 @@
-![903eedffc599ce59649e2afd02c3814c](https://github.com/user-attachments/assets/c92443a9-9b1b-41c7-b81c-69a1f4562a64)## SparseBox
+## SparseBox
 [![Build](https://github.com/136478738/SparseBox/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/136478738/SparseBox/actions/workflows/Build.yml)
 
 On-device backup restoration?
@@ -12,7 +12,7 @@ On-device backup restoration?
 推荐使用[NB助手](https://nbtool8.com/index.html)
 
 汉化版本SparseBox下载地址：[nightly.link](https://nightly.link/136478738/SparseBox/workflows/Build/main/artifact.zip)
-
+![903eedffc599ce59649e2afd02c3814c](https://github.com/user-attachments/assets/c92443a9-9b1b-41c7-b81c-69a1f4562a64)
 SparseBox相关工具下载地址：[123网盘](https://www.123pan.com/s/OnUlVv-yxeU3)
 
 下面是官方原文翻译
