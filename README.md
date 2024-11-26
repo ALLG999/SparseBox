@@ -9,6 +9,7 @@ On-device backup restoration?
 ## Installation
 ## 安装
 推荐使用[NB助手](https://nbtool8.com/index.html)
+汉化版本下载地址：[nightly.link](https://nightly.link/136478738/SparseBox/workflows/Build/main/artifact.zip)
 
 下面是官方原文翻译
 SideStore is recommended as you will also be getting the pairing file and setting up VPN.
