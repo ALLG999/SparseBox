@@ -1,6 +1,8 @@
 ## SparseBox
 [![Build](https://github.com/136478738/SparseBox/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/136478738/SparseBox/actions/workflows/Build.yml)
 
+本项目基于AGPL-3.0许可证开源 请务必遵循相关规定[https://blog.csdn.net/weixin_43841461/article/details/142106462](https://blog.csdn.net/weixin_43841461/article/details/142106462)
+
 On-device backup restoration?
 设备上备份恢复？
 
