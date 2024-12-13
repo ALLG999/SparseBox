@@ -81,6 +81,7 @@ struct ContentView: View {
                     Toggle("Crash Detection (might not work) 崩溃检测（可能不工作）", isOn: bindingForMGKeys(["HCzWusHQwZDea6nNhaKndw"]))
                     Toggle("Dynamic Island (17.4+, might not work) 灵动岛（17.4+，可能无法工作）", isOn: bindingForMGKeys(["YlEtTtHlNesRBMal1CqRaA"]))
                         .disabled(requiresVersion(17, 4))
+                    Toggle("Disable region restrictions 禁用区域限制", isOn: bindingForRegionRestriction())
                     Toggle("Internal Storage info 内部存储信息", isOn: bindingForMGKeys(["LBJfwOEzExRxzlAnSuI7eg"]))
                     Toggle("Metal HUD for all apps 性能监测", isOn: bindingForMGKeys(["EqrsVvjcYDdxHBiQmGhAWw"]))
                     Toggle("Stage Manager 舞台经理（ipad os联动开启）", isOn: bindingForMGKeys(["qeaj75wk3HF4DwQ8qbIi7g"]))
@@ -174,14 +175,22 @@ Thanks to:
             .navigationTitle("SparseBox")
         }
         .onAppear {
+            if initError != nil {
+                lastError = initError
+                initError = nil
+                showErrorAlert.toggle()
+                return
+            }
+            
             _ = start_emotional_damage("127.0.0.1:51820")
             if let altPairingFile = Bundle.main.object(forInfoDictionaryKey: "ALTPairingFile") as? String, altPairingFile.count > 5000, pairingFile == nil {
                 pairingFile = altPairingFile
             }
             startMinimuxer()
             
-            let cacheExtra = mobileGestalt["CacheExtra"] as! NSMutableDictionary
-            productType = cacheExtra["h9jDsbgj7xIVeIQ8S3/X3Q"] as! String
+            if let cacheExtra = mobileGestalt["CacheExtra"] as? NSMutableDictionary {
+                productType = cacheExtra["h9jDsbgj7xIVeIQ8S3/X3Q"] as! String
+            }
         }
     }
     
@@ -190,12 +199,25 @@ Thanks to:
         featFlagsURL = documentsDirectory.appendingPathComponent("FeatureFlags.plist", conformingTo: .data)
         origMGURL = documentsDirectory.appendingPathComponent("OriginalMobileGestalt.plist", conformingTo: .data)
         modMGURL = documentsDirectory.appendingPathComponent("ModifiedMobileGestalt.plist", conformingTo: .data)
-        if !FileManager.default.fileExists(atPath: origMGURL.path) {
-            let url = URL(filePath: "/var/containers/Shared/SystemGroup/systemgroup.com.apple.mobilegestaltcache/Library/Caches/com.apple.MobileGestalt.plist")
-            try? FileManager.default.copyItem(at: url, to: origMGURL)
-            try? FileManager.default.copyItem(at: url, to: modMGURL)
+        
+        do {
+            if !FileManager.default.fileExists(atPath: origMGURL.path) {
+                let url = URL(filePath: "/var/containers/Shared/SystemGroup/systemgroup.com.apple.mobilegestaltcache/Library/Caches/com.apple.MobileGestalt.plist")
+                try FileManager.default.copyItem(at: url, to: origMGURL)
+            }
+            chmod(origMGURL.path, 0o644)
+            
+            if !FileManager.default.fileExists(atPath: modMGURL.path) {
+                try FileManager.default.copyItem(at: origMGURL, to: modMGURL)
+            }
+            chmod(modMGURL.path, 0o644)
+            
+            _mobileGestalt = State(initialValue: try NSMutableDictionary(contentsOf: modMGURL, error: ()))
+        } catch {
+            _mobileGestalt = State(initialValue: [:])
+            _initError = State(initialValue: "Failed to copy MobileGestalt: \(error)")
+            taskRunning = true
         }
-        _mobileGestalt = State(initialValue: try! NSMutableDictionary(contentsOf: modMGURL, error: ()))
         
         // Fix file picker
         let fixMethod = class_getInstanceMethod(UIDocumentPickerViewController.self, #selector(UIDocumentPickerViewController.fix_init(forOpeningContentTypes:asCopy:)))!
@@ -242,6 +264,10 @@ Thanks to:
     }
     
     func bindingForAppleIntelligence() -> Binding<Bool> {
+        guard let cacheVersion = mobileGestalt["CacheVersion"] else {
+            return State(initialValue: false).projectedValue
+        }
+        
         let cacheExtra = mobileGestalt["CacheExtra"] as! NSMutableDictionary
         let key = "A62OafQ85EJAiiqKn4agtg"
         return Binding(
@@ -265,10 +291,32 @@ Thanks to:
             }
         )
     }
+
+    func bindingForRegionRestriction() -> Binding<Bool> {
+        let cacheExtra = mobileGestalt["CacheExtra"] as! NSMutableDictionary
+        return Binding<Bool>(
+            get: {
+                return cacheExtra["h63QSdBCiT/z0WU6rdQv6Q"] as? String == "US" &&
+                    cacheExtra["zHeENZu+wbg7PUprwNwBWg"] as? String == "LL/A"
+            },
+            set: { enabled in
+                if enabled {
+                    cacheExtra["h63QSdBCiT/z0WU6rdQv6Q"] = "US"
+                    cacheExtra["zHeENZu+wbg7PUprwNwBWg"] = "LL/A"
+                } else {
+                    cacheExtra.removeObject(forKey: "h63QSdBCiT/z0WU6rdQv6Q")
+                    cacheExtra.removeObject(forKey: "zHeENZu+wbg7PUprwNwBWg")
+                }
+            }
+        )
+    }
     
     func bindingForTrollPad() -> Binding<Bool> {
+        guard let cacheVersion = mobileGestalt["CacheVersion"] else {
+            return State(initialValue: false).projectedValue
+        }
+        
         // We're going to overwrite DeviceClassNumber but we can't do it via CacheExtra, so we need to do it via CacheData instead
-        // However, CacheData is still a black box, as nobody has yet to document this data, so we're leaving a hardcoded offset for now
         let valueOffset = UserDefaults.standard.integer(forKey: "MGCacheDataDeviceClassNumberOffset")
         let cacheData = mobileGestalt["CacheData"] as! NSMutableData
         //print("Read value from \(cacheData.mutableBytes.load(fromByteOffset: valueOffset, as: Int.self))")
@@ -304,6 +352,10 @@ Thanks to:
     }
     
     func bindingForMGKeys<T: Equatable>(_ keys: [String], type: T.Type = Int.self, defaultValue: T? = 0, enableValue: T? = 1) -> Binding<Bool> {
+        guard let cacheVersion = mobileGestalt["CacheVersion"] else {
+            return State(initialValue: false).projectedValue
+        }
+        
         let cacheExtra = mobileGestalt["CacheExtra"] as! NSMutableDictionary
         return Binding(
             get: {
