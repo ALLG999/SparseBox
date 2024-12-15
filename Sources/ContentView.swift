@@ -21,6 +21,7 @@ struct ContentView: View {
     @State var showPairingFileImporter = false
     @State var showErrorAlert = false
     @State var taskRunning = false
+    @State var initError: String?
     @State var lastError: String?
     @State var path = NavigationPath()
     var body: some View {
