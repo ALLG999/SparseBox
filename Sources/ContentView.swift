@@ -10,7 +10,7 @@ extension UIDocumentPickerViewController {
 struct ContentView: View {
     let os = ProcessInfo().operatingSystemVersion
     let origMGURL, modMGURL, featFlagsURL: URL
-    @AppStorage("PairingFile") var pairingFile: String?
+    @AppStorage("配对文件") var pairingFile: String?
     @State var mbdb: Backup?
     @State var eligibilityData = Data()
     @State var featureFlagsData = Data()
@@ -28,7 +28,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Form {
                 Section {
-                    Button(pairingFile == nil ? "选择配对文件" : "重置配对文件") {
+                    Button(pairingFile == nil ? "Select pairing file选择配对文件" : "Reset pairing file重置配对文件") {
                         if pairingFile == nil {
                             showPairingFileImporter.toggle()
                         } else {
@@ -38,8 +38,8 @@ struct ContentView: View {
                     .dropDestination(for: Data.self) { items, location in
                         guard let item = items.first else { return false }
                         pairingFile = try! String(decoding: item, as: UTF8.self)
-                        guard pairingFile?.contains("DeviceCertificate") ?? false else {
-                            lastError = "The file you just dropped is not a pairing file"
+                        guard pairingFile?.contains("DeviceCertificate设备证书") ?? false else {
+                            lastError = "The file you just dropped is not a pairing file 您刚刚拖放的文件不是配对文件"
                             showErrorAlert.toggle()
                             pairingFile = nil
                             return false
@@ -49,21 +49,21 @@ struct ContentView: View {
                     }
                 } footer: {
                     if pairingFile != nil {
-                        Text("选择配对文件")
+                        Text("Pairing file selected选择配对文件")
                     } else {
-                        Text("选择或拖放配对文件以继续。更多信息:https://docs.sidestore.io/docs/getting-started/pairing-file")
+                        Text("Select or drag and drop a pairing file to continue. 选择或拖放配对文件以继续。更多信息:https://docs.sidestore.io/docs/getting-started/pairing-file")
                     }
                 }
                 Section {
-                    Button("列出已安装的应用程序") {
+                    Button("List installed apps列出已安装的应用程序") {
                         testListApps()
                     }
-                    Button("绕过3个应用程序限制") {
+                    Button("Bypass 3 app limit绕过3个应用程序限制") {
                         testBypassAppLimit()
                     }
                     .disabled(taskRunning)
                 } footer: {
-                    Text("隐藏已安装的免费开发人员应用程序，这样您就可以安装3个以上的应用程序。您需要为安装或更新的每3个应用程序应用此功能。")
+                    Text("Hide free developer apps from installd, so you could install more than 3 apps. You need to apply this for each 3 apps you install or update.隐藏已安装的免费开发人员应用程序，这样您就可以安装3个以上的应用程序。您需要为安装或更新的每3个应用程序应用此功能。")
                 }
                 Section {
                     Toggle("Action Button 操作按钮", isOn: bindingForMGKeys(["cT44WE1EohiwRzhsZ8xEsw"]))
@@ -110,7 +110,7 @@ struct ContentView: View {
                     Text("Only change device model if you're downloading Apple Intelligence models. Face ID may break.仅在下载Apple Intelligence型号时更改设备型号。Face ID可能会损坏。")
                 }
                 Section {
-                    let cacheExtra = mobileGestalt["CacheExtra"] as! NSMutableDictionary
+                    let cacheExtra = mobileGestalt["CacheExtra额外缓存"] as! NSMutableDictionary
                     Toggle("Become iPadOS 变身iPadOS", isOn: bindingForTrollPad())
                     // validate DeviceClass
                         .disabled(cacheExtra["+3Uf0Pm5F8Xy7Onyvko0vA"] as! String != "iPhone")
@@ -118,14 +118,14 @@ struct ContentView: View {
                     Text("Override user interface idiom to iPadOS, so you could use all iPadOS multitasking features on iPhone. Gives you the same capabilities as TrollPad, but may cause some issues.\nPLEASE DO NOT TURN OFF SHOW DOCK IN STAGE MANAGER OTHERWISE YOUR PHONE WILL BOOTLOOP WHEN ROTATING TO LANDSCAPE.覆盖iPadOS的用户界面习惯用法，这样你就可以在iPhone上使用iPadOS的所有多任务功能。提供与TrollPad相同的功能，但可能会导致一些问题。请不要在舞台管理中关闭显示坞，否则你的手机将在旋转到横屏时启动")
                 }
                 Section {
-                    Toggle("恢复完成后重新启动", isOn: $reboot)
-                    Button("应用更改") {
+                    Toggle("Reboot after finish restoring恢复完成后重新启动", isOn: $reboot)
+                    Button("Apply changes应用更改") {
                         saveProductType()
                         try! mobileGestalt.write(to: modMGURL)
                         applyChanges()
                     }
                     .disabled(taskRunning)
-                    Button("Reset changes") {
+                    Button("Reset changes重置更改") {
                         try! FileManager.default.removeItem(at: modMGURL)
                         try! FileManager.default.copyItem(at: origMGURL, to: modMGURL)
                         mobileGestalt = try! NSMutableDictionary(contentsOf: modMGURL, error: ())
@@ -233,7 +233,7 @@ Thanks to:
                 mbdb = Restore.createBypassAppLimit()
                 path.append("ApplyNoReboot")
             } else {
-                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up."
+                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
                 showErrorAlert.toggle()
             }
             taskRunning = false
@@ -244,7 +244,7 @@ Thanks to:
         if ready() {
             path.append("ListApps")
         } else {
-            lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up."
+            lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
             showErrorAlert.toggle()
         }
     }
@@ -257,7 +257,7 @@ Thanks to:
                 //Restore.createBackupFiles(files: generateFilesToRestore())
                 path.append("ApplyChanges")
             } else {
-                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up."
+                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
                 showErrorAlert.toggle()
             }
             taskRunning = false
