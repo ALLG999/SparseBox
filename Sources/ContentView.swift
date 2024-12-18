@@ -233,7 +233,7 @@ Thanks to:
                 mbdb = Restore.createBypassAppLimit()
                 path.append("ApplyNoReboot")
             } else {
-                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
+                lastError = "minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
                 showErrorAlert.toggle()
             }
             taskRunning = false
@@ -244,7 +244,7 @@ Thanks to:
         if ready() {
             path.append("ListApps")
         } else {
-            lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
+            lastError = "minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
             showErrorAlert.toggle()
         }
     }
@@ -257,7 +257,7 @@ Thanks to:
                 //Restore.createBackupFiles(files: generateFilesToRestore())
                 path.append("ApplyChanges")
             } else {
-                lastError = "minimuxer is not ready. Ensure you have WiFi and WireGuard VPN set up. minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
+                lastError = "minimuxer 尚未准备好。请确保您已设置 WiFi 和 WireGuard VPN。"
                 showErrorAlert.toggle()
             }
             taskRunning = false
