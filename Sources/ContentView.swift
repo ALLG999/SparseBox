@@ -28,7 +28,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Form {
                 Section {
-                    Button(pairingFile == nil ? "Select pairing file" : "Reset pairing file") {
+                    Button(pairingFile == nil ? "选择配对文件" : "重置配对文件") {
                         if pairingFile == nil {
                             showPairingFileImporter.toggle()
                         } else {
