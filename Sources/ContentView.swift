@@ -1,4 +1,3 @@
-//  为了部落
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -11,7 +10,7 @@ extension UIDocumentPickerViewController {
 struct ContentView: View {
     let os = ProcessInfo().operatingSystemVersion
     let origMGURL, modMGURL, featFlagsURL: URL
-    @AppStorage("配对文件") var pairingFile: String?
+    @AppStorage("PairingFile") var pairingFile: String?
     @State var mbdb: Backup?
     @State var eligibilityData = Data()
     @State var featureFlagsData = Data()
@@ -29,7 +28,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Form {
                 Section {
-                    Button(pairingFile == nil ? "Select pairing file选择配对文件" : "Reset pairing file重置配对文件") {
+                    Button(pairingFile == nil ? "选择配对文件" : "重置配对文件") {
                         if pairingFile == nil {
                             showPairingFileImporter.toggle()
                         } else {
@@ -39,8 +38,8 @@ struct ContentView: View {
                     .dropDestination(for: Data.self) { items, location in
                         guard let item = items.first else { return false }
                         pairingFile = try! String(decoding: item, as: UTF8.self)
-                        guard pairingFile?.contains("DeviceCertificate设备证书") ?? false else {
-                            lastError = "The file you just dropped is not a pairing file 您刚刚拖放的文件不是配对文件"
+                        guard pairingFile?.contains("设备证书") ?? false else {
+                            lastError = "您刚刚拖放的文件不是配对文件"
                             showErrorAlert.toggle()
                             pairingFile = nil
                             return false
@@ -50,53 +49,53 @@ struct ContentView: View {
                     }
                 } footer: {
                     if pairingFile != nil {
-                        Text("Pairing file selected选择配对文件")
+                        Text("选择配对文件")
                     } else {
-                        Text("Select or drag and drop a pairing file to continue. 选择或拖放配对文件以继续。更多信息:https://docs.sidestore.io/docs/getting-started/pairing-file")
+                        Text("选择或拖放配对文件以继续。更多信息:https://docs.sidestore.io/docs/getting-started/pairing-file")
                     }
                 }
                 Section {
-                    Button("List installed apps列出已安装的应用程序") {
+                    Button("列出已安装的应用程序") {
                         testListApps()
                     }
-                    Button("Bypass 3 app limit绕过3个应用程序限制") {
+                    Button("绕过3个应用程序限制") {
                         testBypassAppLimit()
                     }
                     .disabled(taskRunning)
                 } footer: {
-                    Text("Hide free developer apps from installd, so you could install more than 3 apps. You need to apply this for each 3 apps you install or update.隐藏已安装的免费开发人员应用程序，这样您就可以安装3个以上的应用程序。您需要为安装或更新的每3个应用程序应用此功能。")
+                    Text("隐藏已安装的免费开发人员应用程序，这样您就可以安装3个以上的应用程序。您需要为安装或更新的每3个应用程序应用此功能。")
                 }
                 Section {
-                    Toggle("Action Button 操作按钮", isOn: bindingForMGKeys(["cT44WE1EohiwRzhsZ8xEsw"]))
+                    Toggle("操作按钮", isOn: bindingForMGKeys(["cT44WE1EohiwRzhsZ8xEsw"]))
                         .disabled(requiresVersion(17))
                     Toggle("允许安装iPadOS应用程序", isOn: bindingForMGKeys(["9MZ5AdH43csAUajl/dU+IQ"], type: [Int].self, defaultValue: [1], enableValue: [1, 2]))
-                    Toggle("Always on Display 始终显示(18.0+)", isOn: bindingForMGKeys(["j8/Omm6s1lsmTDFsXjsBfA", "2OOJf1VhaM7NxfRok3HbWQ"]))
+                    Toggle("始终显示(18.0+)", isOn: bindingForMGKeys(["j8/Omm6s1lsmTDFsXjsBfA", "2OOJf1VhaM7NxfRok3HbWQ"]))
                         .disabled(requiresVersion(18))
-                    Toggle("Apple Intelligence SIRI AI", isOn: bindingForAppleIntelligence())
+                    Toggle("Apple Intelligence", isOn: bindingForAppleIntelligence())
                         .disabled(requiresVersion(18))
-                    Toggle("Apple Pencil 苹果笔", isOn: bindingForMGKeys(["yhHcB0iH0d1XzPO/CFd3ow"]))
-                    Toggle("Boot chime 经典启动铃声", isOn: bindingForMGKeys(["QHxt+hGLaBPbQJbXiUJX3w"]))
-                    Toggle("Camera button 相机按钮(18.0rc+)", isOn: bindingForMGKeys(["CwvKxM2cEogD3p+HYgaW0Q", "oOV1jhJbdV3AddkcCg0AEA"]))
+                    Toggle("苹果笔", isOn: bindingForMGKeys(["yhHcB0iH0d1XzPO/CFd3ow"]))
+                    Toggle("经典启动铃声", isOn: bindingForMGKeys(["QHxt+hGLaBPbQJbXiUJX3w"]))
+                    Toggle(" 相机按钮(18.0rc+)", isOn: bindingForMGKeys(["CwvKxM2cEogD3p+HYgaW0Q", "oOV1jhJbdV3AddkcCg0AEA"]))
                         .disabled(requiresVersion(18))
-                    Toggle("Charge limit 充电限制", isOn: bindingForMGKeys(["37NVydb//GP/GrhuTN+exg"]))
+                    Toggle("充电限制", isOn: bindingForMGKeys(["37NVydb//GP/GrhuTN+exg"]))
                         .disabled(requiresVersion(17))
-                    Toggle("Crash Detection (might not work) 崩溃检测（可能不工作）", isOn: bindingForMGKeys(["HCzWusHQwZDea6nNhaKndw"]))
-                    Toggle("Dynamic Island (17.4+, might not work) 灵动岛（17.4+，可能无法工作）", isOn: bindingForMGKeys(["YlEtTtHlNesRBMal1CqRaA"]))
+                    Toggle("崩溃检测（可能不工作）", isOn: bindingForMGKeys(["HCzWusHQwZDea6nNhaKndw"]))
+                    Toggle("灵动岛（17.4+，可能无法工作）", isOn: bindingForMGKeys(["YlEtTtHlNesRBMal1CqRaA"]))
                         .disabled(requiresVersion(17, 4))
-                    Toggle("Disable region restrictions 禁用区域限制", isOn: bindingForRegionRestriction())
-                    Toggle("Internal Storage info 内部存储信息", isOn: bindingForMGKeys(["LBJfwOEzExRxzlAnSuI7eg"]))
-                    Toggle("Metal HUD for all apps 性能监测", isOn: bindingForMGKeys(["EqrsVvjcYDdxHBiQmGhAWw"]))
-                    Toggle("Stage Manager 舞台经理（ipad os联动开启）", isOn: bindingForMGKeys(["qeaj75wk3HF4DwQ8qbIi7g"]))
+                    Toggle("禁用区域限制", isOn: bindingForRegionRestriction())
+                    Toggle("内部存储信息", isOn: bindingForMGKeys(["LBJfwOEzExRxzlAnSuI7eg"]))
+                    Toggle("性能监测", isOn: bindingForMGKeys(["EqrsVvjcYDdxHBiQmGhAWw"]))
+                    Toggle("舞台经理（ipad os联动开启）", isOn: bindingForMGKeys(["qeaj75wk3HF4DwQ8qbIi7g"]))
                         .disabled(UIDevice.current.userInterfaceIdiom != .pad)
                     if let isSE = UIDevice.perform(Selector("_hasHomeButton")) {
-                        Toggle("Tap to Wake 点击唤醒 (iPhone SE)", isOn: bindingForMGKeys(["yZf3GTRMGTuwSV/lD7Cagw"]))
+                        Toggle("点击唤醒 (iPhone SE)", isOn: bindingForMGKeys(["yZf3GTRMGTuwSV/lD7Cagw"]))
                     }
                 } header: {
-                    Text("MobileGestalt 配置文件")
+                    Text("配置文件")
                 }
                 Section {
-                    Picker("Device model 设备型号", selection:$productType) {
-                        Text("unchanged 不变").tag(ContentView.machineName())
+                    Picker("设备型号", selection:$productType) {
+                        Text("默认").tag(ContentView.machineName())
                         if UIDevice.current.userInterfaceIdiom == .pad {
                             Text("iPad Pro 11 inch 5th Gen").tag("iPad16,3")
                         } else {
@@ -106,27 +105,27 @@ struct ContentView: View {
                     }
                     //.disabled(requiresVersion(18, 1))
                 } header: {
-                    Text("Device spoofing 设备欺骗")
+                    Text("设备欺骗")
                 } footer: {
-                    Text("Only change device model if you're downloading Apple Intelligence models. Face ID may break.仅在下载Apple Intelligence型号时更改设备型号。Face ID可能会损坏。")
+                    Text("仅在下载Apple Intelligence型号时更改设备型号。Face ID可能会损坏。")
                 }
                 Section {
-                    let cacheExtra = mobileGestalt["CacheExtra额外缓存"] as! NSMutableDictionary
-                    Toggle("Become iPadOS 变身iPadOS", isOn: bindingForTrollPad())
+                    let cacheExtra = mobileGestalt["CacheExtra"] as? NSMutableDictionary
+                    Toggle("变身iPadOS", isOn: bindingForTrollPad())
                     // validate DeviceClass
                         .disabled(cacheExtra["+3Uf0Pm5F8Xy7Onyvko0vA"] as! String != "iPhone")
                 } footer: {
-                    Text("Override user interface idiom to iPadOS, so you could use all iPadOS multitasking features on iPhone. Gives you the same capabilities as TrollPad, but may cause some issues.\nPLEASE DO NOT TURN OFF SHOW DOCK IN STAGE MANAGER OTHERWISE YOUR PHONE WILL BOOTLOOP WHEN ROTATING TO LANDSCAPE.覆盖iPadOS的用户界面习惯用法，这样你就可以在iPhone上使用iPadOS的所有多任务功能。提供与TrollPad相同的功能，但可能会导致一些问题。请不要在舞台管理中关闭显示坞，否则你的手机将在旋转到横屏时启动")
+                    Text("覆盖iPadOS的用户界面习惯用法，这样你就可以在iPhone上使用iPadOS的所有多任务功能。提供与TrollPad相同的功能，但可能会导致一些问题。请不要在舞台管理中关闭显示坞，否则你的手机将在旋转到横屏时启动")
                 }
                 Section {
-                    Toggle("Reboot after finish restoring恢复完成后重新启动", isOn: $reboot)
-                    Button("Apply changes应用更改") {
+                    Toggle("恢复完成后重新启动", isOn: $reboot)
+                    Button("应用更改") {
                         saveProductType()
                         try! mobileGestalt.write(to: modMGURL)
                         applyChanges()
                     }
                     .disabled(taskRunning)
-                    Button("Reset changes重置更改") {
+                    Button("重置更改") {
                         try! FileManager.default.removeItem(at: modMGURL)
                         try! FileManager.default.copyItem(at: origMGURL, to: modMGURL)
                         mobileGestalt = try! NSMutableDictionary(contentsOf: modMGURL, error: ())
