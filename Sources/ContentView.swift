@@ -113,9 +113,9 @@ struct ContentView: View {
                     let cacheExtra = mobileGestalt["CacheExtra"] as? NSMutableDictionary
                     Toggle("变身iPadOS", isOn: bindingForTrollPad())
                     // validate DeviceClass
-                        .disabled(cacheExtra["+3Uf0Pm5F8Xy7Onyvko0vA"] as! String != "iPhone")
+                        .disabled(cacheExtra?["+3Uf0Pm5F8Xy7Onyvko0vA"] as? String != "iPhone")
                 } footer: {
-                    Text("覆盖iPadOS的用户界面习惯用法，这样你就可以在iPhone上使用iPadOS的所有多任务功能。提供与TrollPad相同的功能，但可能会导致一些问题。请不要在舞台管理中关闭显示坞，否则你的手机将在旋转到横屏时启动")
+                    Text("覆盖iPadOS的用户界面习惯用法，这样你就可以在iPhone上使用iPadOS的所有多任务功能。提供与TrollPad相同的功能，但可能会导致一些问题。请不要在舞台管理中关闭显示坞，否则你的手机将在旋转到横屏时启动。")
                 }
                 Section {
                     Toggle("恢复完成后重新启动", isOn: $reboot)
