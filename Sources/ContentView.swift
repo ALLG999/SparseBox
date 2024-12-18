@@ -75,7 +75,7 @@ struct ContentView: View {
                         .disabled(requiresVersion(18))
                     Toggle("苹果笔", isOn: bindingForMGKeys(["yhHcB0iH0d1XzPO/CFd3ow"]))
                     Toggle("经典启动铃声", isOn: bindingForMGKeys(["QHxt+hGLaBPbQJbXiUJX3w"]))
-                    Toggle(" 相机按钮(18.0rc+)", isOn: bindingForMGKeys(["CwvKxM2cEogD3p+HYgaW0Q", "oOV1jhJbdV3AddkcCg0AEA"]))
+                    Toggle("相机按钮(18.0rc+)", isOn: bindingForMGKeys(["CwvKxM2cEogD3p+HYgaW0Q", "oOV1jhJbdV3AddkcCg0AEA"]))
                         .disabled(requiresVersion(18))
                     Toggle("充电限制", isOn: bindingForMGKeys(["37NVydb//GP/GrhuTN+exg"]))
                         .disabled(requiresVersion(17))
@@ -216,7 +216,7 @@ Thanks to:
             _mobileGestalt = State(initialValue: try NSMutableDictionary(contentsOf: modMGURL, error: ()))
         } catch {
             _mobileGestalt = State(initialValue: [:])
-            _initError = State(initialValue: "Failed to copy MobileGestalt: \(error)")
+            _initError = State(initialValue: "无法复制 MobileGestalt： \(error)")
             taskRunning = true
         }
         
