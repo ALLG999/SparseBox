@@ -28,7 +28,7 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             Form {
                 Section {
-                    Button(pairingFile == nil ? "选择配对文件" : "重置配对文件") {
+                    Button(pairingFile == nil ? "Select pairing file" : "Reset pairing file") {
                         if pairingFile == nil {
                             showPairingFileImporter.toggle()
                         } else {
@@ -38,7 +38,7 @@ struct ContentView: View {
                     .dropDestination(for: Data.self) { items, location in
                         guard let item = items.first else { return false }
                         pairingFile = try! String(decoding: item, as: UTF8.self)
-                        guard pairingFile?.contains("设备证书") ?? false else {
+                        guard pairingFile?.contains("DeviceCertificate") ?? false else {
                             lastError = "您刚刚拖放的文件不是配对文件"
                             showErrorAlert.toggle()
                             pairingFile = nil
