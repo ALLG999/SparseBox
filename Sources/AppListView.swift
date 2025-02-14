@@ -13,12 +13,12 @@ struct AppItemView: View {
                 }
             }
             Section {
-                if let bundlePath = appDetails["路径"] {
+                if let bundlePath = appDetails["Path"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
                     }
                 }
-                if let containerPath = appDetails["容器"] {
+                if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
                     }
@@ -38,8 +38,8 @@ struct AppListView: View {
     var results: [String] {
         Array(searchString.isEmpty ? apps.keys : apps.filter {
             let appDetails = $0.value.value as? [String: AnyCodable]
-            let appName = (appDetails!["BundleID名称"]?.value as! String?)!
-            let appPath = (appDetails!["路径"]?.value as! String?)!
+            let appName = (appDetails!["CFBundleName"]?.value as! String?)!
+            let appPath = (appDetails!["Path"]?.value as! String?)!
             return appName.contains(searchString) || appPath.contains(searchString)
         }.keys)
     }
