@@ -93,28 +93,28 @@ class MobileDevice {
     public static func rebootDevice(udid: String) {
         requireDevice(udid: udid) { device in
             guard let device else {
-                print("ERROR: Failed to requireDevice()")
+                print("错误：无法要求设备()")
                 return
             }
             requireLockdownClient(device: device, handshake: true) { lkd_client in
                 guard let lkd_client else {
-                    print("ERROR: Failed to requireLockdownClient()")
+                    print("错误：无法要求锁定客户端()")
                     return
                 }
                 let serviceName = "com.apple.mobile.diagnostics_relay"
                 requireLockdownService(client: lkd_client, serviceName: serviceName, requiresEscrowBag: false) { lkd_service in
                     guard let lkd_service else {
-                        print("ERROR: Failed to requireLockdownClient(\(serviceName)")
+                        print("错误：无法要求锁定客户端(\(serviceName)")
                         return
                     }
                     var diagnostics_client: diagnostics_relay_client_t?
                     diagnostics_relay_client_new(device, lkd_service, &diagnostics_client)
                     guard let diagnostics_client else {
-                        print("ERROR: failed to create diagnostic service")
+                        print("错误：无法创建诊断服务")
                         return
                     }
                     if diagnostics_relay_restart(diagnostics_client, DIAGNOSTICS_RELAY_ACTION_FLAG_NONE) != DIAGNOSTICS_RELAY_E_SUCCESS {
-                        print("ERROR: Failed to reboot device")
+                        print("错误：无法重启设备")
                     }
                     diagnostics_relay_goodbye(diagnostics_client)
                     diagnostics_relay_client_free(diagnostics_client)
