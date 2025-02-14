@@ -200,7 +200,7 @@ extension String {
         }
 
         let initializedCount = try initializer(buffer)
-        precondition(initializedCount <= capacity, "Overran buffer in initializer!")
+        precondition(initializedCount <= capacity, "初始化程序中的缓冲区溢出！")
 
         // add zero termination
         buffer[initializedCount] = 0
