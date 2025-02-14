@@ -41,7 +41,7 @@ struct LogView: View {
                 }
             }
         }
-        .navigationTitle(isRebooting ? "Rebooting device" : "Log output")
+        .navigationTitle(isRebooting ? "重启设备" : "输出日志")
     }
     
     init(mbdb: Backup, reboot: Bool) {
@@ -57,8 +57,8 @@ struct LogView: View {
         
         let deviceList = MobileDevice.deviceList()
         guard deviceList.count == 1 else {
-            print("Invalid device count: \(deviceList.count)")
-            udid = "invalid"
+            print("设备数量无效: \(deviceList.count)")
+            udid = "无效"
             return
         }
         udid = deviceList.first!
@@ -75,20 +75,20 @@ struct LogView: View {
             
             // Restore now
             var restoreArgs = [
-                "idevicebackup2",
-                "-n", "restore", "--no-reboot", "--system",
+                "设备备份2",
+                "-n", "恢复", "--无需重启", "--系统",
                 documentsDirectory.path(percentEncoded: false)
             ]
-            print("Executing args: \(restoreArgs)")
+            print("执行参数: \(restoreArgs)")
             var argv = restoreArgs.map{ strdup($0) }
             let result = idevicebackup2_main(Int32(restoreArgs.count), &argv)
-            print("idevicebackup2 exited with code \(result)")
+            print("设备备份2退出并显示代码 \(result)")
             
             log.append("\n")
-            if log.contains("Domain name cannot contain a slash") {
-                log.append("Result: this iOS version is not supported.")
-            } else if log.contains("crash_on_purpose") || result == 0 {
-                log.append("Result: restore successful.")
+            if log.contains("域名不能包含斜杠") {
+                log.append("结果：不支持该iOS版本。")
+            } else if log.contains("故意撞车") || result == 0 {
+                log.append("结果：恢复成功。")
                 if willReboot {
                     isRebooting.toggle()
                     MobileDevice.rebootDevice(udid: udid)
