@@ -172,15 +172,15 @@ struct MobileBackupDatabase {
         var buffer = ByteBuffer(data: data)
         if let dataMagic = buffer.readString(length: 4) {
             if dataMagic != magic {
-                fatalError("Wrong magic")
+                fatalError("错误的魔法")
             }
         } else {
-            fatalError("Can't parse magic")
+            fatalError("无法解析魔法")
         }
         if let dataVersion = buffer.readInteger(endianness: .big, as: UInt16.self) {
-            print("Version: \(dataVersion)")
+            print("版本: \(dataVersion)")
         } else {
-            fatalError("Can't parse version")
+            fatalError("无法解析版本")
         }
         
         records = [MBDBRecord]()
