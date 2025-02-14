@@ -41,7 +41,7 @@ struct LogView: View {
                 }
             }
         }
-        .navigationTitle(isRebooting ? "重启设备" : "输出日志")
+        .navigationTitle(isRebooting ? "Rebooting device" : "Log output")
     }
     
     init(mbdb: Backup, reboot: Bool) {
@@ -58,7 +58,7 @@ struct LogView: View {
         let deviceList = MobileDevice.deviceList()
         guard deviceList.count == 1 else {
             print("设备数量无效: \(deviceList.count)")
-            udid = "无效"
+            udid = "invalid"
             return
         }
         udid = deviceList.first!
@@ -75,8 +75,8 @@ struct LogView: View {
             
             // Restore now
             var restoreArgs = [
-                "设备备份2",
-                "-n", "恢复", "--无需重启", "--系统",
+                "idevicebackup2",
+                "-n", "restore", "--no-reboot", "--system",
                 documentsDirectory.path(percentEncoded: false)
             ]
             print("执行参数: \(restoreArgs)")
