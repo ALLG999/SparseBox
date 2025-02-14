@@ -13,20 +13,20 @@ struct AppItemView: View {
                 }
             }
             Section {
-                if let bundlePath = appDetails["Path"] {
-                    Button("Copy app bundle folder") {
+                if let bundlePath = appDetails["路径"] {
+                    Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
                     }
                 }
-                if let containerPath = appDetails["Container"] {
-                    Button("Copy app data folder") {
+                if let containerPath = appDetails["容器"] {
+                    Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
                     }
                 }
             } header: {
-                Text("Arbitrary read exploit")
+                Text("任意读取漏洞")
             } footer: {
-                Text("After copying path, open Settings, paste it in search bar, select all again and tap Share.\n\nOnly supported on iOS 18.2b1 and older. For this exploit, folders can only be shared via AirDrop.\nIf you're sharing App Store apps, please note that it will still remain encrypted.")
+                Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
             }
         }
     }
@@ -38,8 +38,8 @@ struct AppListView: View {
     var results: [String] {
         Array(searchString.isEmpty ? apps.keys : apps.filter {
             let appDetails = $0.value.value as? [String: AnyCodable]
-            let appName = (appDetails!["CFBundleName"]?.value as! String?)!
-            let appPath = (appDetails!["Path"]?.value as! String?)!
+            let appName = (appDetails!["BundleID名称"]?.value as! String?)!
+            let appPath = (appDetails!["路径"]?.value as! String?)!
             return appName.contains(searchString) || appPath.contains(searchString)
         }.keys)
     }
@@ -48,9 +48,9 @@ struct AppListView: View {
             ForEach(results, id: \.self) { bundleID in
                 let value = apps[bundleID]
                 let appDetails = value?.value as? [String: AnyCodable]
-                let appImage = appDetails!["PlaceholderIcon"]?.value as! Data?
-                let appName = (appDetails!["CFBundleName"]?.value as! String?)!
-                let appPath = (appDetails!["Path"]?.value as! String?)!
+                let appImage = appDetails!["图标"]?.value as! Data?
+                let appName = (appDetails!["BundleID名称"]?.value as! String?)!
+                let appPath = (appDetails!["路径"]?.value as! String?)!
                 NavigationLink {
                     AppItemView(appDetails: appDetails!)
                 } label: {
@@ -69,7 +69,7 @@ struct AppListView: View {
                 Task {
                     let deviceList = MobileDevice.deviceList()
                     guard deviceList.count == 1 else {
-                        print("Invalid device count: \(deviceList.count)")
+                        print("设备数量无效: \(deviceList.count)")
                         return
                     }
                     let udid = deviceList.first!
@@ -78,6 +78,6 @@ struct AppListView: View {
             }
         }
         .searchable(text: $searchString)
-        .navigationTitle("App list")
+        .navigationTitle("应用程序列表")
     }
 }
