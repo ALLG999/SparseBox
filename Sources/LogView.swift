@@ -28,7 +28,7 @@ struct LogView: View {
                         let data = fileHandle.availableData
                         if !data.isEmpty, var logString = String(data: data, encoding: .utf8) {
                             if logString.contains(udid) {
-                                logString = logString.replacingOccurrences(of: udid, with: "<redacted>")
+                                logString = logString.replacingOccurrences(of: udid, with: "<已编辑>")
                             }
                             log.append(logString)
                             proxy.scrollTo(0)
