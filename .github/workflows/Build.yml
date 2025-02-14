@@ -45,5 +45,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@main
         with:
-          name: artifact
+          name: ALLG_SparseBox
           path: packages/*.ipa
