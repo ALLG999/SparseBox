@@ -10,7 +10,7 @@ extension UIDocumentPickerViewController {
 struct ContentView: View {
     let os = ProcessInfo().operatingSystemVersion
     let origMGURL, modMGURL, featFlagsURL: URL
-    @AppStorage("配对文件") var pairingFile: String?
+    @AppStorage("PairingFile") var pairingFile: String?
     @State var mbdb: Backup?
     @State var eligibilityData = Data()
     @State var featureFlagsData = Data()
@@ -157,7 +157,7 @@ struct ContentView: View {
                     showErrorAlert.toggle()
                 }
             })
-            .alert("Error", isPresented: $showErrorAlert) {
+            .alert("错误", isPresented: $showErrorAlert) {
                 Button("OK") {}
             } message: {
                 Text(lastError ?? "???")
