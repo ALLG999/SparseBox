@@ -14,7 +14,7 @@ class BackupFile {
     }
 
     public func toRecord() -> MBDBRecord {
-        fatalError("子类必须实现该函数");
+        fatalError("Subclass must implement this function");
     }
 }
 
