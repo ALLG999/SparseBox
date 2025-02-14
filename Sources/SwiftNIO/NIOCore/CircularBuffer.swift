@@ -155,16 +155,16 @@ extension CircularBuffer: Collection, MutableCollection {
         get {
             assert(
                 position.isValidIndex(for: self),
-                "illegal index used, index was for CircularBuffer with count \(position._backingCheck), "
-                    + "but actual count is \(self.count)"
+                "使用了非法索引，索引用于 CircularBuffer，其计数 \(position._backingCheck), "
+                    + "但实际数量是 \(self.count)"
             )
             return self._buffer[position.backingIndex]!
         }
         set {
             assert(
                 position.isValidIndex(for: self),
-                "illegal index used, index was for CircularBuffer with count \(position._backingCheck), "
-                    + "but actual count is \(self.count)"
+                "使用了非法索引，索引用于 CircularBuffer，其计数 \(position._backingCheck), "
+                    + "但实际数量是 \(self.count)"
             )
             self._buffer[position.backingIndex] = newValue
         }
@@ -672,13 +672,13 @@ extension CircularBuffer: RangeReplaceableCollection {
         )
         assert(
             subrange.lowerBound.isValidIndex(for: self),
-            "illegal index used, index was for CircularBuffer with count \(subrange.lowerBound._backingCheck), "
+            "使用了非法索引，索引用于 CircularBuffer，其计数 \(subrange.lowerBound._backingCheck), "
                 + "but actual count is \(self.count)"
         )
         assert(
             subrange.upperBound.isValidIndex(for: self),
-            "illegal index used, index was for CircularBuffer with count \(subrange.upperBound._backingCheck), "
-                + "but actual count is \(self.count)"
+            "使用了非法索引，索引用于 CircularBuffer，其计数 \(subrange.upperBound._backingCheck), "
+                + "但实际数量是 \(self.count)"
         )
 
         let subrangeCount = self.distance(from: subrange.lowerBound, to: subrange.upperBound)
@@ -746,8 +746,8 @@ extension CircularBuffer: RangeReplaceableCollection {
     public mutating func remove(at position: Index) -> Element {
         assert(
             position.isValidIndex(for: self),
-            "illegal index used, index was for CircularBuffer with count \(position._backingCheck), "
-                + "but actual count is \(self.count)"
+            "使用了非法索引，索引用于 CircularBuffer，其计数 \(position._backingCheck), "
+                + "但实际数量是 \(self.count)"
         )
         defer {
             assert(self.verifyInvariants())
