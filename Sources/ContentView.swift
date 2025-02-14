@@ -10,7 +10,7 @@ extension UIDocumentPickerViewController {
 struct ContentView: View {
     let os = ProcessInfo().operatingSystemVersion
     let origMGURL, modMGURL, featFlagsURL: URL
-    @AppStorage("PairingFile") var pairingFile: String?
+    @AppStorage("配对文件") var pairingFile: String?
     @State var mbdb: Backup?
     @State var eligibilityData = Data()
     @State var featureFlagsData = Data()
@@ -38,7 +38,7 @@ struct ContentView: View {
                     .dropDestination(for: Data.self) { items, location in
                         guard let item = items.first else { return false }
                         pairingFile = try! String(decoding: item, as: UTF8.self)
-                        guard pairingFile?.contains("DeviceCertificate") ?? false else {
+                        guard pairingFile?.contains("设备证书") ?? false else {
                             lastError = "您刚刚拖放的文件不是配对文件"
                             showErrorAlert.toggle()
                             pairingFile = nil
@@ -135,9 +135,7 @@ struct ContentView: View {
                 } footer: {
                     VStack {
                         Text("""
-A terrible app by @khanhduytran0. Use it at your own risk.
 一款糟糕的应用程序。使用它的风险由你自己承担。
-Thanks to:
 感谢下面这些大佬无私的分享与支持：
 @SideStore: em_proxy and minimuxer
 @JJTech0130: SparseRestore and backup exploit
