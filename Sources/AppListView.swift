@@ -16,15 +16,13 @@ struct AppItemView: View {
                 if let bundlePath = appDetails["Path"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
-                        UIApplication.shared.alert(title: NSLocalizedString("通知", comment: "info header"), body: NSLocalizedString("已复制，请勿重复点击", comment: "巴拉巴拉"))
-                            
+                        print("应用程序包文件夹已复制到剪贴板：\(bundlePath)")    
                     }
                 }
                 if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
-                         UIApplication.shared.alert(title: NSLocalizedString("通知", comment: "info header"), body: NSLocalizedString("已复制，请勿重复点击", comment: "巴拉巴拉"))
-                       
+                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
                     }
                 }
             } header: {
