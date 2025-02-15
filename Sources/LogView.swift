@@ -28,7 +28,7 @@ struct LogView: View {
                         let data = fileHandle.availableData
                         if !data.isEmpty, var logString = String(data: data, encoding: .utf8) {
                             if logString.contains(udid) {
-                                logString = logString.replacingOccurrences(of: udid, with: "<已编辑>")
+                                logString = logString.replacingOccurrences(of: udid, with: "<redacted>")
                             }
                             log.append(logString)
                             proxy.scrollTo(0)
@@ -57,7 +57,7 @@ struct LogView: View {
         
         let deviceList = MobileDevice.deviceList()
         guard deviceList.count == 1 else {
-            print("设备数量无效: \(deviceList.count)")
+            print("Invalid device count: \(deviceList.count)")
             udid = "invalid"
             return
         }
@@ -79,7 +79,7 @@ struct LogView: View {
                 "-n", "restore", "--no-reboot", "--system",
                 documentsDirectory.path(percentEncoded: false)
             ]
-            print("执行参数: \(restoreArgs)")
+            print("Executing args: \(restoreArgs)")
             var argv = restoreArgs.map{ strdup($0) }
             let result = idevicebackup2_main(Int32(restoreArgs.count), &argv)
             print("设备备份2退出并显示代码 \(result)")
