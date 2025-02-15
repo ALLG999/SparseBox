@@ -48,9 +48,9 @@ struct AppListView: View {
             ForEach(results, id: \.self) { bundleID in
                 let value = apps[bundleID]
                 let appDetails = value?.value as? [String: AnyCodable]
-                let appImage = appDetails!["图标"]?.value as! Data?
-                let appName = (appDetails!["BundleID名称"]?.value as! String?)!
-                let appPath = (appDetails!["路径"]?.value as! String?)!
+                let appImage = appDetails!["PlaceholderIcon"]?.value as! Data?
+                let appName = (appDetails!["CFBundleName"]?.value as! String?)!
+                let appPath = (appDetails!["Path"]?.value as! String?)!
                 NavigationLink {
                     AppItemView(appDetails: appDetails!)
                 } label: {
