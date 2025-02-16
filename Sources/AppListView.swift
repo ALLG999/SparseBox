@@ -16,13 +16,15 @@ struct AppItemView: View {
                 if let bundlePath = appDetails["Path"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
-                        print("应用程序包文件夹已复制到剪贴板：\(bundlePath)")    
+                        print("应用程序包文件夹已复制到剪贴板：\(bundlePath)") 
+                        Text("应用程序包文件夹已复制到剪贴板：\(bundlePath)")
                     }
                 }
                 if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
-                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
+                        
+                        Text("应用程序包文件夹已复制到剪贴板：\(containerPath)")
                     }
                 }
             } header: {
