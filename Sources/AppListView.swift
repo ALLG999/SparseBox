@@ -47,6 +47,7 @@ struct AppItemView: View {
             ToastView(message: toastMessage, duration: 5, isVisible: $showToast)
                 .animation(.easeInOut, value: showToast)
                 .padding()
+        )
         }
 }
 
