@@ -20,13 +20,10 @@ struct AppItemView: View {
                     Button("复制应用程序包文件夹") {
                         let filePath = "file://\(bundlePath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        message = "应用程序包文件夹已复制到剪贴板：\(bundlePath)"
                         showMessage = true
-                        print(message)
+                        print("应用程序包文件夹已复制到剪贴板：\(bundlePath)")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5)
-                        {
                         showMessage = false
-                    }
                     }
                 }
 
@@ -34,13 +31,10 @@ struct AppItemView: View {
                     Button("复制应用程序数据文件夹") {
                         let filePath = "file://\(containerPath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        message = "应用程序数据文件夹已复制到剪贴板：\(containerPath)"
                         showMessage = true
-                        print(message)
+                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5)
-                        {
                         showMessage = false
-                    }
                     }
                 }
             } header: {
