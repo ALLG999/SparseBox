@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct AppItemView: View {
-    @State private var showToast = false
-    @State private var toastMessage: String = ""
     let appDetails: [String: AnyCodable]
     var body: some View {
         Form {
@@ -20,9 +18,6 @@ struct AppItemView: View {
                     Button("复制应用程序包文件夹") {
                         let filePath = "file://\(bundlePath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        toastMessage = "应用程序包文件夹已复制到剪贴板：\(bundlePath)"
-                        showToast = true
-                        print(toastMessage)
                     }
                 }
 
@@ -31,9 +26,6 @@ struct AppItemView: View {
                     Button("复制应用程序数据文件夹") {
                         let filePath = "file://\(containerPath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        toastMessage = "应用程序数据文件夹已复制到剪贴板：\(containerPath)"
-                        showToast = true
-                        print(toastMessage)
                     }
                 }
             } header: {
@@ -42,15 +34,6 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
             }
         }
-         .overlay(
-            Group {
-                if showToast {
-                    ToastView(message: toastMessage, duration: 5, isVisible: $showToast)
-                        .animation(.easeInOut, value: showToast)
-                        .padding()
-                }
-            }
-        )
         }
 }
 
