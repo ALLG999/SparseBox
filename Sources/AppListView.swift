@@ -43,10 +43,6 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
             }
         }
-        .overlay(
-            MessageView(message: message, duration: 5, isVisible: $showMessage)
-                .animation(.easeInOut, value: showMessage)
-    }
 }
 
 struct MessageView: View {
