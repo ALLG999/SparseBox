@@ -19,39 +19,27 @@ struct AppItemView: View {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
                         showMessage = true
                         print("应用程序包文件夹已复制到剪贴板：\(bundlePath)") 
-                          // 5 秒后自动关闭消息
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                        showMessage = false
                 }
-                if showMessage {
-                    Text("应用程序包文件夹已复制到剪贴板：\(bundlePath) \n倒计时五秒关闭弹窗")
-                       .foregroundColor(.green)
-                       .padding()
-                       .transition(.opacity) // 添加淡入淡出动画
-                       .onAppear {
-                        // 如果需要，可以在这里添加其他逻辑
-                    }
-                       .animation(.easeInOut, value: showMessage) // 添加动画
+               MessageView(
+                     mmessage: "应用程序包文件夹已复制到剪贴板：\(bundlePath)",
+                     duration: 5,
+                     isVisible: $showMessage
+                    )
+                     .animation(.easeInOut, value: showMessage)
                 }
                }
                 if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
                         showMessage = true
-                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
-                         // 5 秒后自动关闭消息
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                        showMessage = false
+                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)") 
                 }
-                if showMessage {
-                    Text("应用程序数据文件夹已复制到剪贴板：\(containerPath) \n倒计时五秒关闭弹窗")
-                        .foregroundColor(.green)
-                        .padding() 
-                        .transition(.opacity) // 添加淡入淡出动画
-                        .onAppear {
-                        // 如果需要，可以在这里添加其他逻辑
-                    }
-                     .animation(.easeInOut, value: showMessage) // 添加动画
+                MessageView(
+                     mmessage: "应用程序包文件夹已复制到剪贴板：\(containerPath)",
+                     duration: 5,
+                     isVisible: $showMessage
+                    )
+                     .animation(.easeInOut, value: showMessage)
                     }
             } header: {
                 Text("任意读取漏洞")
