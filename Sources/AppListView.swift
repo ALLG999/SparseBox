@@ -20,11 +20,19 @@ struct AppItemView: View {
                         Text("应用程序包文件夹已复制到剪贴板：\(bundlePath)")
                     }
                 }
-                if let containerPath = appDetails["Container"] {
-                    Button("复制应用程序数据文件夹") {
-                        UIPasteboard.general.string = "file://a\(containerPath)"
-                        
-                        Text("应用程序包文件夹已复制到剪贴板：\(containerPath)")
+                if let containerPath = appDetails["Container"] as? String {
+                    Button(action: {
+                        let filePath = "file://a\(containerPath)"
+                        UIPasteboard.general.string = filePath
+                        self.showAlert = true // 触发警告显示
+                        }) {
+                    Text("复制应用程序包文件夹")
+                }
+                // 显示复制成功的警告
+                Alert(isPresented: $showAlert) {
+                    Alert.Title("复制成功")
+                    Alert.Message("应用程序包文件夹路径已复制到剪贴板：\(containerPath)")
+                }
                     }
                 }
             } header: {
