@@ -17,18 +17,30 @@ struct AppItemView: View {
                 if let bundlePath = appDetails["Path"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
+                        showMessage = true
                         print("应用程序包文件夹已复制到剪贴板：\(bundlePath)") 
-                        Text("应用程序包文件夹已复制到剪贴板：\(bundlePath)")
+                          // 5 秒后自动关闭消息
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        showMessage = false
+                }
+                if showMessage {
+                    Text("应用程序包文件夹已复制到剪贴板：\(bundlePath) \n倒计时五秒关闭弹窗")
+                        .foregroundColor(.green)
+                        .padding()
                     }
                 }
+               }
                 if let containerPath = appDetails["Container"] {
-                    Button("复制应用程序包文件夹") {
+                    Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
                         showMessage = true
                         print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
+                         // 5 秒后自动关闭消息
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        showMessage = false
                 }
                 if showMessage {
-                    Text("应用程序包文件夹已复制到剪贴板：\(containerPath)")
+                    Text("应用程序数据文件夹已复制到剪贴板：\(containerPath) \n倒计时五秒关闭弹窗")
                         .foregroundColor(.green)
                         .padding()
                     }
