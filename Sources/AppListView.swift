@@ -15,8 +15,6 @@ struct AppItemView: View {
                         .textSelection(.enabled)
                     }
                 }
-            }
-
             Section {
                 if let bundlePath = appDetails["Path"]?.value as? String {
                     Button("复制应用程序包文件夹") {
@@ -46,6 +44,7 @@ struct AppItemView: View {
             MessageView(message: message, duration: 5, isVisible: $showMessage)
                 .animation(.easeInOut, value: showMessage)
         )
+        }
         }
 }
 
