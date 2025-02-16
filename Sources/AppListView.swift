@@ -49,7 +49,6 @@ struct MessageView: View {
     var message: String
     var duration: Double
     @Binding var isVisible: Bool
-
     var body: some View {
         if isVisible {
             Text(message)
@@ -64,7 +63,8 @@ struct MessageView: View {
       }
  }
  }
- }           
+ }    
+ }       
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
     @State var searchString: String = ""
