@@ -29,12 +29,14 @@ struct AppItemView: View {
                     Text("复制应用程序包文件夹")
                 }
                 // 显示复制成功的警告
-                Alert(isPresented: $showAlert) {
-                    Alert.Title("复制成功")
-                    Alert.Message("应用程序包文件夹路径已复制到剪贴板：\(containerPath)")
+                .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("复制成功"),
+                    message: Text("应用程序包文件夹路径已复制到剪贴板：\(containerPath)"),
+                    dismissButton: .default(Text("确定"))
                 }
                     }
-                }
+                    }
             } header: {
                 Text("任意读取漏洞")
             } footer: {
@@ -42,7 +44,7 @@ struct AppItemView: View {
             }
         }
     }
-
+ }
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
     @State var searchString: String = ""
