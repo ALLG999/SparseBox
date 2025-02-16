@@ -18,7 +18,7 @@ struct AppItemView: View {
             }
 
             Section {
-                if let bundlePath = appDetails["Path"] {
+                if let bundlePath = appDetails["Path"]?.value as? String {
                     Button("复制应用程序包文件夹") {
                         let filePath = "file://\(bundlePath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
@@ -28,7 +28,7 @@ struct AppItemView: View {
                     }
                 }
 
-                if let containerPath = appDetails["Container"] {
+                if let containerPath = appDetails["Container"]?.value as? String {
                     Button("复制应用程序数据文件夹") {
                         let filePath = "file://\(containerPath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
