@@ -25,9 +25,13 @@ struct AppItemView: View {
                 }
                 if showMessage {
                     Text("应用程序包文件夹已复制到剪贴板：\(bundlePath) \n倒计时五秒关闭弹窗")
-                        .foregroundColor(.green)
-                        .padding()
+                       .foregroundColor(.green)
+                       .padding()
+                       .transition(.opacity) // 添加淡入淡出动画
+                       .onAppear {
+                        // 如果需要，可以在这里添加其他逻辑
                     }
+                       .animation(.easeInOut, value: showMessage) // 添加动画
                 }
                }
                 if let containerPath = appDetails["Container"] {
@@ -42,8 +46,12 @@ struct AppItemView: View {
                 if showMessage {
                     Text("应用程序数据文件夹已复制到剪贴板：\(containerPath) \n倒计时五秒关闭弹窗")
                         .foregroundColor(.green)
-                        .padding()
+                        .padding() 
+                        .transition(.opacity) // 添加淡入淡出动画
+                        .onAppear {
+                        // 如果需要，可以在这里添加其他逻辑
                     }
+                     .animation(.easeInOut, value: showMessage) // 添加动画
                     }
             } header: {
                 Text("任意读取漏洞")
