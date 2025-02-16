@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AppItemView: View {
      @State private var showMessage = false
+     @State private var message: String = "" // 用于存储显示的消息
     let appDetails: [String : AnyCodable]
     var body: some View {
         Form {
@@ -14,32 +15,23 @@ struct AppItemView: View {
                 }
             }
             Section {
-                if let bundlePath = appDetails["Path"] {
+                if let bundlePath = appDetails["Path"]?.value as? String {
                     Button("复制应用程序包文件夹") {
-                        UIPasteboard.general.string = "file://a\(bundlePath)"
+                        let filePath = "file://a\(bundlePath)"
+                        UIPasteboard.general.string = filePath
+                        message = "应用程序包文件夹已复制到剪贴板：\(bundlePath)"
                         showMessage = true
-                        print("应用程序包文件夹已复制到剪贴板：\(bundlePath)") 
+                        print(message)
                 }
-               MessageView(
-                     mmessage: "应用程序包文件夹已复制到剪贴板：\(bundlePath)",
-                     duration: 5,
-                     isVisible: $showMessage
-                    )
-                     .animation(.easeInOut, value: showMessage)
                 }
-               }
                 if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
-                        UIPasteboard.general.string = "file://a\(containerPath)"
+                        let filePath = "file://a\(containerPath)"
                         showMessage = true
-                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)") 
-                }
-                MessageView(
-                     mmessage: "应用程序包文件夹已复制到剪贴板：\(containerPath)",
-                     duration: 5,
-                     isVisible: $showMessage
-                    )
-                     .animation(.easeInOut, value: showMessage)
+                        UIPasteboard.general.string = filePath
+                        message = "应用程序数据文件夹已复制到剪贴板：\(containerPath)"
+                        showMessage = true
+                        print(message)
                     }
             } header: {
                 Text("任意读取漏洞")
@@ -47,8 +39,32 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
             }
         }
+             .overlay(
+            MessageView(message: message, duration: 5, isVisible: $showMessage)
+        .animation(.easeInOut, value: showMessage)
     }
  }
+         
+struct MessageView: View {
+    var message: String
+    var duration: Double
+    @Binding var isVisible: Bool
+
+    var body: some View {
+        if isVisible {
+            Text(message)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.black.opacity(0.7))
+                .cornerRadius(10)
+                .transition(.opacity)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                        isVisible = false
+      }
+ }
+ }
+ }           
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
     @State var searchString: String = ""
