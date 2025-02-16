@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AppItemView: View {
+     @State private var showMessage = false
     let appDetails: [String : AnyCodable]
     var body: some View {
         Form {
@@ -21,20 +22,15 @@ struct AppItemView: View {
                     }
                 }
                 if let containerPath = appDetails["Container"] as? String {
-                    Button(action: {
-                        let filePath = "file://a\(containerPath)"
-                        UIPasteboard.general.string = filePath
-                        self.showAlert = true // 触发警告显示
-                        }) {
-                    Text("复制应用程序包文件夹")
+                    Button("复制应用程序包文件夹") {
+                        UIPasteboard.general.string = "file://a\(containerPath)"
+                        showMessage = true
+                        print("应用程序数据文件夹已复制到剪贴板：\(copiedPath)")
                 }
-                // 显示复制成功的警告
-                .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("复制成功"),
-                    message: Text("应用程序包文件夹路径已复制到剪贴板：\(containerPath)"),
-                    dismissButton: .default(Text("确定"))
-                }
+                if showMessage {
+                    Text("应用程序包文件夹已复制到剪贴板：\(copiedPath)")
+                        .foregroundColor(.green)
+                        .padding()
                     }
                     }
             } header: {
