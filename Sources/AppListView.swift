@@ -21,14 +21,14 @@ struct AppItemView: View {
                         Text("应用程序包文件夹已复制到剪贴板：\(bundlePath)")
                     }
                 }
-                if let containerPath = appDetails["Container"] as? String {
+                if let containerPath = appDetails["Container"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
                         showMessage = true
-                        print("应用程序数据文件夹已复制到剪贴板：\(copiedPath)")
+                        print("应用程序数据文件夹已复制到剪贴板：\(containerPath)")
                 }
                 if showMessage {
-                    Text("应用程序包文件夹已复制到剪贴板：\(copiedPath)")
+                    Text("应用程序包文件夹已复制到剪贴板：\(containerPath)")
                         .foregroundColor(.green)
                         .padding()
                     }
