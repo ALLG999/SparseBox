@@ -40,6 +40,7 @@ struct AppItemView: View {
             }
         }
     }
+ }
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
     @State var searchString: String = ""
