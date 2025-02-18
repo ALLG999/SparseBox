@@ -1,33 +1,49 @@
 import SwiftUI
-import UserNotifications
+
+struct ToastModifier: ViewModifier {
+    @Binding var showToast: Bool
+    let message: String
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                Group {
+                    if showToast {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Text(message)
+                                    .padding()
+                                    .background(Color.black.opacity(0.7))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                        }
+                        .transition(.slide)
+                        .animation(.easeInOut(duration: 0.3), value: showToast)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                self.showToast = false
+                            }
+                        }
+                    }
+                },
+                alignment: .bottom
+            )
+    }
+}
+
+extension View {
+    func toast(isPresented: Binding<Bool>, message: String) -> some View {
+        self.modifier(ToastModifier(showToast: isPresented, message: message))
+    }
+}
 
 struct AppItemView: View {
     let appDetails: [String : AnyCodable]
-
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
-            if let error = error {
-                print("Error requesting notification permission: \(error)")
-            }
-        }
-    }
-    
-    func sendLocalNotification(title: String, body: String) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error adding notification request: \(error)")
-            }
-        }
-    }
-    
+    @State private var showToast: Bool = false
     var body: some View {
         Form {
             Section {
@@ -41,21 +57,17 @@ struct AppItemView: View {
             Section {
                 if let bundlePath = appDetails["Path"]
                 {
-                    Button("复制应用程序包文件夹") 
-                    {
+                    Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
-                        requestNotificationPermission()
-                        sendLocalNotification(title: "操作成功", body: "已复制应用程序包文件夹路径")
+                        showToast = true
                     }
                 }
 
                 if let containerPath = appDetails["Container"]
                 {
-                    Button("复制应用程序数据文件夹") 
-                    {
+                    Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
-                        requestNotificationPermission()
-                        sendLocalNotification(title: "操作成功", body: "已复制应用程序数据文件夹路径")
+                        showToast = true
                     }
                 }
             } header: {
@@ -64,9 +76,7 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
            }
         }
-        .onAppear {
-            requestNotificationPermission()
-        }
+        .toast(isPresented: $showToast, message: "路径已复制！")
       }
    }
 
