@@ -41,7 +41,7 @@ struct LogView: View {
                 }
             }
         }
-        .navigationTitle(isRebooting ? "Rebooting device" : "Log output")
+        .navigationTitle(isRebooting ? "正在重新启动设备" : "日志输出")
     }
     
     init(mbdb: Backup, reboot: Bool) {
@@ -57,8 +57,8 @@ struct LogView: View {
         
         let deviceList = MobileDevice.deviceList()
         guard deviceList.count == 1 else {
-            print("Invalid device count: \(deviceList.count)")
-            udid = "invalid"
+            print("无效的设备数量: \(deviceList.count)")
+            udid = "无效"
             return
         }
         udid = deviceList.first!
@@ -79,7 +79,7 @@ struct LogView: View {
                 "-n", "restore", "--no-reboot", "--system",
                 documentsDirectory.path(percentEncoded: false)
             ]
-            print("Executing args: \(restoreArgs)")
+            print("正在执行参数: \(restoreArgs)")
             var argv = restoreArgs.map{ strdup($0) }
             let result = idevicebackup2_main(Int32(restoreArgs.count), &argv)
             print("设备备份2退出并显示代码 \(result)")
