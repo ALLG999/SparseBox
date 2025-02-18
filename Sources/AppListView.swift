@@ -50,7 +50,7 @@ struct AppItemView: View {
                         let filePath = "file://a\(bundlePath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
                         alertMessage = "已复制应用程序包文件夹路径到剪贴板"
-                        showToast = true
+                        showAlert = true
                     }
                 }
 
@@ -60,7 +60,7 @@ struct AppItemView: View {
                         let filePath = "file://a\(containerPath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
                         alertMessage = "已复制应用程序数据文件夹路径到剪贴板"
-                        showToast = true
+                        showAlert = true
                     }
                 }
             } header: {
