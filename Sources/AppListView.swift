@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Toast 视图
 struct ToastView: View {
     let message: String
     var body: some View {
@@ -12,12 +13,28 @@ struct ToastView: View {
     }
 }
 
+// Alert 视图修饰器
+struct AlertModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let message: String
+
+    func body(content: Content) -> some View {
+        content
+            .alert("操作结果", isPresented: $isPresented) {
+                Button("确定", role: .none) {}
+            } message: {
+                Text(message)
+            }
+    }
+}
+
 struct AppItemView: View {
     let appDetails: [String: AnyCodable]
     @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var alertMessage = ""
     var body: some View {
         Form {
+            // 显示应用详情
             Section {
                 ForEach(Array(appDetails.keys), id: \.self) { k in
                     let v = appDetails[k]?.value as? String
@@ -30,20 +47,20 @@ struct AppItemView: View {
                 if let bundlePath = appDetails["Path"]
                 {
                     Button("复制应用程序包文件夹") {
-                        let filePath = "file://\(bundlePath)" // 修正路径拼接
+                        let filePath = "file://a\(bundlePath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        toastMessage = "已复制应用程序包文件夹路径到剪贴板"
-                            showToast = true
+                        alertMessage = "已复制应用程序包文件夹路径到剪贴板"
+                        showToast = true
                     }
                 }
 
                 if let containerPath = appDetails["Container"]
                 {
                     Button("复制应用程序数据文件夹") {
-                        let filePath = "file://\(containerPath)" // 修正路径拼接
+                        let filePath = "file://a\(containerPath)" // 修正路径拼接
                         UIPasteboard.general.string = filePath
-                        toastMessage = "已复制应用程序数据文件夹路径到剪贴板"
-                            showToast = true
+                        alertMessage = "已复制应用程序数据文件夹路径到剪贴板"
+                        showToast = true
                     }
                 }
             } header: {
@@ -52,17 +69,7 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
             }
         }
-        // 显示 Toast
-            if showToast {
-                ToastView(message: toastMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                            withAnimation {
-                                showToast = false
-                            }
-                        }
-                    }
-            }
+       .modifier(AlertModifier(isPresented: $showAlert, message: alertMessage))
         }
         }
 
