@@ -1,77 +1,74 @@
 import SwiftUI
-
-// Toast 视图
-struct ToastView: View {
-    let message: String
-    var body: some View {
-        Text(message)
-            .padding()
-            .background(Color.black.opacity(0.7))
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .transition(.opacity)
-    }
-}
-
-// Alert 视图修饰器
-struct AlertModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    let message: String
-
-    func body(content: Content) -> some View {
-        content
-            .alert("操作结果", isPresented: $isPresented) {
-                Button("确定", role: .none) {}
-            } message: {
-                Text(message)
-            }
-    }
-}
+import UserNotifications
 
 struct AppItemView: View {
-    let appDetails: [String: AnyCodable]
-    @State private var showToast = false
-    @State private var alertMessage = ""
+    let appDetails: [String : AnyCodable]
+
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error)")
+            }
+        }
+    }
+    
+    func sendLocalNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error adding notification request: \(error)")
+            }
+        }
+    }
+    
     var body: some View {
         Form {
-            // 显示应用详情
             Section {
                 ForEach(Array(appDetails.keys), id: \.self) { k in
                     let v = appDetails[k]?.value as? String
                     Text(k)
                         .badge("\(v ?? "(null)" )")
                         .textSelection(.enabled)
-                    }
                 }
+            }
             Section {
                 if let bundlePath = appDetails["Path"]
                 {
-                    Button("复制应用程序包文件夹") {
-                        let filePath = "file://a\(bundlePath)" // 修正路径拼接
-                        UIPasteboard.general.string = filePath
-                        alertMessage = "已复制应用程序包文件夹路径到剪贴板"
-                        showAlert = true
+                    Button("复制应用程序包文件夹") 
+                    {
+                        UIPasteboard.general.string = "file://a\(bundlePath)"
+                        requestNotificationPermission()
+                        sendLocalNotification(title: "操作成功", body: "已复制应用程序包文件夹路径")
                     }
                 }
 
                 if let containerPath = appDetails["Container"]
                 {
-                    Button("复制应用程序数据文件夹") {
-                        let filePath = "file://a\(containerPath)" // 修正路径拼接
-                        UIPasteboard.general.string = filePath
-                        alertMessage = "已复制应用程序数据文件夹路径到剪贴板"
-                        showAlert = true
+                    Button("复制应用程序数据文件夹") 
+                    {
+                        UIPasteboard.general.string = "file://a\(containerPath)"
+                        requestNotificationPermission()
+                        sendLocalNotification(title: "操作成功", body: "已复制应用程序数据文件夹路径")
                     }
                 }
             } header: {
                 Text("任意读取漏洞")
             } footer: {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
-            }
+           }
         }
-       .modifier(AlertModifier(isPresented: $showAlert, message: alertMessage))
+        .onAppear {
+            requestNotificationPermission()
         }
-        }
+      }
+   }
 
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
