@@ -157,15 +157,15 @@ struct ContentView: View {
                     showErrorAlert.toggle()
                 }
             })
-            .alert("错误", isPresented: $showErrorAlert) {
-                Button("OK") {}
+            .alert("操作异常", isPresented: $showErrorAlert) {
+                Button("确定") {}
             } message: {
-                Text(lastError ?? "???")
+                Text(lastError ?? "未知错误")
             }
             .navigationDestination(for: String.self) { view in
-                if view == "ApplyChanges" {
+                if view == "应用变更" {
                     LogView(mbdb: mbdb!, reboot: reboot)
-                } else if view == "ApplyNoReboot" {
+                } else if view == "无重启模式" {
                     LogView(mbdb: mbdb!, reboot: false)
                 } else if view == "ListApps" {
                     AppListView()
@@ -214,7 +214,7 @@ struct ContentView: View {
             _mobileGestalt = State(initialValue: try NSMutableDictionary(contentsOf: modMGURL, error: ()))
         } catch {
             _mobileGestalt = State(initialValue: [:])
-            _initError = State(initialValue: "无法复制 MobileGestalt： \(error)")
+            _initError = State(initialValue: "系统配置文件复制失败: \(error)")
             taskRunning = true
         }
         
