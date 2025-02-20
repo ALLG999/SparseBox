@@ -1,4 +1,44 @@
 import SwiftUI
+struct ToastModifier: ViewModifier {
+    @Binding var showToast: Bool
+    let message: String
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                Group {
+                    if showToast {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Text(message)
+                                    .padding()
+                                    .background(Color.black.opacity(0.7))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                        }
+                        .transition(.slide)
+                        .animation(.easeInOut(duration: 0.3), value: showToast)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                self.showToast = false
+                            }
+                        }
+                    }
+                },
+                alignment: .bottom
+            )
+    }
+}
+
+extension View {
+    func toast(isPresented: Binding<Bool>, message: String) -> some View {
+        self.modifier(ToastModifier(showToast: isPresented, message: message))
+    }
+}
 
 struct AppItemView: View {
     let appDetails: [String : AnyCodable]
@@ -16,11 +56,13 @@ struct AppItemView: View {
                 if let bundlePath = appDetails["Path"] {
                     Button("Copy app bundle folder") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
+                        showToast = true
                     }
                 }
                 if let containerPath = appDetails["Container"] {
                     Button("Copy app data folder") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
+                        showToast = true
                     }
                 }
             } header: {
@@ -29,6 +71,7 @@ struct AppItemView: View {
                 Text("After copying path, open Settings, paste it in search bar, select all again and tap Share.\n\nOnly supported on iOS 18.2b1 and older. For this exploit, folders can only be shared via AirDrop.\nIf you're sharing App Store apps, please note that it will still remain encrypted.")
             }
         }
+        .toast(isPresented: $showToast, message: "Copy to clipboard")
     }
 }
 
