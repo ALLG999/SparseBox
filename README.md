@@ -33,3 +33,5 @@
 - @libimobiledevice
 - @V_wo50 中文翻译版本ALLG
 - [开启SIRI AI](https://gist.github.com/f1shy-dev/23b4a78dc283edd30ae2b2e6429129b5#file-best_sae_trick-md)
+## Star History
+[![Star History Chart](https://api.star-history.com/svg?repos=ALLG999/SparseBox&type=Timeline)](https://star-history.com/#ALLG999/SparseBox&Timeline)
