@@ -125,18 +125,18 @@ struct Restore {
         ]
         
         // create the links
-        for (index, file) in 文件.enumerated() {
+        for (index, file) in files.enumerated() {
             filesList.append(ConcreteFile(
-                path: "Library/Preferences/temp\(index)"，
-                domain: "RootDomain"，
-                contents: file.contents，
-                owner: file.owner，
-                group: file.group，
+                path: "Library/Preferences/temp\(index)",
+                domain: "RootDomain",
+                contents: file.contents,
+                owner: file.owner,
+                group: file.group,
                 inode: UInt64(index)))
         }
         
         // add the file paths
-        for (index, file) in 文件.enumerated() {
+        for (index, file) in files.enumerated() {
             let restoreFilePath = file.to.path(percentEncoded: false)
             var basePath = "/var/backup"
             // set it to work in the separate volumes (prevents a bootloop)
@@ -149,27 +149,27 @@ struct Restore {
                 basePath = "/private/var/backup"
             }
             filesList.append(Directory(
-                path: ""，
-                domain: "SysContainerDomain-../../../../../../../..\(basePath)\(file.to.deletingLastPathComponent().path(percentEncoded: false))"，
-                owner: file.owner，
+                path: "",
+                domain: "SysContainerDomain-../../../../../../../..\(basePath)\(file.to.deletingLastPathComponent().path(percentEncoded: false))",
+                owner: file.owner,
                 group: file.group
             ))
             filesList.append(ConcreteFile(
-                path: ""，
-                domain: "SysContainerDomain-../../../../../../../..\(basePath)\(file.to.path(percentEncoded: false))"，
+                path: "",
+                domain: "SysContainerDomain-../../../../../../../..\(basePath)\(file.to.path(percentEncoded: false))",
                 contents: Data(),
-                owner: file.owner，
-                group: file.group，
+                owner: file.owner,
+                group: file.group,
                 inode: UInt64(index)))
         }
         
         // break the hard links
-        for (index, _) in 文件.enumerated() {
+        for (index, _) in files.enumerated() {
             filesList.append(ConcreteFile(
-                path: ""，
-                domain: "SysContainerDomain-../../../../../../../../var/.backup.i/var/root/Library/Preferences/temp\(index)"，
+                path: "",
+                domain: "SysContainerDomain-../../../../../../../../var/.backup.i/var/root/Library/Preferences/temp\(index)",
                 contents: Data(),
-                owner: 501，
+                owner: 501,
                 group: 501))
         }
         
