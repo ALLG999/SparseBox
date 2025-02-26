@@ -124,38 +124,38 @@ struct MBDBRecord {
         var buffer = ByteBufferAllocator().buffer(capacity: capacity)
         
         let domainData = domain.data(using: .utf8)!
-        buffer.writeInteger(Int16(domainData.count), endianness: .big， as: Int16.self)
+        buffer.writeInteger(Int16(domainData.count), endianness: .big, as: Int16.self)
         buffer.writeData(domainData)
         
         let filenameData = filename.data(using: .utf8)!
-        buffer.writeInteger(Int16(filenameData.count), endianness: .big， as: Int16.self)
+        buffer.writeInteger(Int16(filenameData.count), endianness: .big, as: Int16.self)
         buffer.writeData(filenameData)
         
         let linkData = link.data(using: .utf8)!
-        buffer.writeInteger(Int16(linkData.count), endianness: .big， as: Int16.self)
+        buffer.writeInteger(Int16(linkData.count), endianness: .big, as: Int16.self)
         buffer.writeData(linkData)
         
-        buffer.writeInteger(Int16(hash.count), endianness: .big， as: Int16.self)
+        buffer.writeInteger(Int16(hash.count), endianness: .big, as: Int16.self)
         buffer.writeData(hash)
         
-        buffer.writeInteger(Int16(key.count), endianness: .big， as: Int16.self)
+        buffer.writeInteger(Int16(key.count), endianness: .big, as: Int16.self)
         buffer.writeData(key)
         
-        buffer.writeInteger(mode, endianness: .big， as: UInt16.self)
-        buffer.writeInteger(inode, endianness: .big， as: UInt64.self)
-        buffer.writeInteger(user_id, endianness: .big， as: Int32.self)
-        buffer.writeInteger(group_id, endianness: .big， as: Int32.self)
-        buffer.writeInteger(mtime, endianness: .big， as: UInt32.self)
-        buffer.writeInteger(atime, endianness: .big， as: UInt32.self)
-        buffer.writeInteger(ctime, endianness: .big， as: UInt32.self)
-        buffer.writeInteger(size, endianness: .big， as: UInt64.self)
-        buffer.writeInteger(flags, endianness: .big， as: UInt8.self)
+        buffer.writeInteger(mode, endianness: .big, as: UInt16.self)
+        buffer.writeInteger(inode, endianness: .big, as: UInt64.self)
+        buffer.writeInteger(user_id, endianness: .big, as: Int32.self)
+        buffer.writeInteger(group_id, endianness: .big, as: Int32.self)
+        buffer.writeInteger(mtime, endianness: .big, as: UInt32.self)
+        buffer.writeInteger(atime, endianness: .big, as: UInt32.self)
+        buffer.writeInteger(ctime, endianness: .big, as: UInt32.self)
+        buffer.writeInteger(size, endianness: .big, as: UInt64.self)
+        buffer.writeInteger(flags, endianness: .big, as: UInt8.self)
         
-        buffer.writeInteger(UInt8(properties.count), endianness: .big， as: UInt8.self)
+        buffer.writeInteger(UInt8(properties.count), endianness: .big, as: UInt8.self)
         for (name, value) in properties {
-            buffer.writeInteger(UInt16(name.count), endianness: .big， as: UInt16.self)
+            buffer.writeInteger(UInt16(name.count), endianness: .big, as: UInt16.self)
             buffer.writeString(name)
-            buffer.writeInteger(UInt16(value.count), endianness: .big， as: UInt16.self)
+            buffer.writeInteger(UInt16(value.count), endianness: .big, as: UInt16.self)
             buffer.writeString(value)
         }
         
@@ -165,7 +165,7 @@ struct MBDBRecord {
 
 struct MobileBackupDatabase {
     let magic = "mbdb"
-    let version: [UInt8] = [0x05， 0x00];
+    let version: [UInt8] = [0x05, 0x00];
     var records: [MBDBRecord]
     
     init(data: Data) {
@@ -177,7 +177,7 @@ struct MobileBackupDatabase {
         } else {
             fatalError("Can't parse magic")
         }
-        if let dataVersion = buffer.readInteger(endianness: .big， as: UInt16.self) {
+        if let dataVersion = buffer.readInteger(endianness: .big, as: UInt16.self) {
             print("Version: \(dataVersion)")
         } else {
             fatalError("Can't parse version")
