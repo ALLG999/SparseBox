@@ -41,7 +41,7 @@ struct LogView: View {
                 }
             }
         }
-        .navigationTitle(isRebooting ? "正在重新启动设备" : "日志输出")
+        .navigationTitle(isRebooting ? "Rebooting device" : "Log output")
     }
     
     init(mbdb: Backup, reboot: Bool) {
@@ -57,8 +57,8 @@ struct LogView: View {
         
         let deviceList = MobileDevice.deviceList()
         guard deviceList.count == 1 else {
-            print("无效的设备数量: \(deviceList.count)")
-            udid = "无效"
+            print("Invalid device count: \(deviceList.count)")
+            udid = "invalid"
             return
         }
         udid = deviceList.first!
