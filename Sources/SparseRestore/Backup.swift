@@ -169,12 +169,12 @@ class Backup {
 
     func generateStatus() -> [String : Any] {
         return [
-            "BackupState": "new"，
+            "BackupState": "new",
             "Date": Date(),
             //datetime.fromisoformat("1970-01-01T00:00:00+00:00"),
-            "IsFullBackup": false，
-            "SnapshotState": "finished"，
-            "UUID": "00000000-0000-0000-0000-000000000000"，
+            "IsFullBackup": false,
+            "SnapshotState": "finished",
+            "UUID": "00000000-0000-0000-0000-000000000000",
             "Version": "2.4"
         ]
     }
@@ -211,7 +211,7 @@ class Backup {
             Z8FDgd7YoALY1g==
             """, options: .ignoreUnknownCharacters)!,
             "Lockdown": [:],
-            "SystemDomainsVersion": "20.0"，
+            "SystemDomainsVersion": "20.0",
             "Version": "9.1"
         ]
     }
