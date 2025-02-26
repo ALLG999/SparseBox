@@ -93,28 +93,28 @@ class MobileDevice {
     public static func rebootDevice(udid: String) {
         requireDevice(udid: udid) { device in
             guard let device else {
-                print("[错误] 设备连接失败")
+                print("ERROR: Failed to requireDevice()")
                 return
             }
             requireLockdownClient(device: device, handshake: true) { lkd_client in
                 guard let lkd_client else {
-                    print("[错误] 安全服务初始化失败")
+                    print("ERROR: Failed to requireLockdownClient()")
                     return
                 }
                 let serviceName = "com.apple.mobile.diagnostics_relay"
                 requireLockdownService(client: lkd_client, serviceName: serviceName, requiresEscrowBag: false) { lkd_service in
                     guard let lkd_service else {
-                        print("[错误] 无法启动诊断服务(\(serviceName))")
+                        print("ERROR: Failed to requireLockdownClient(\(serviceName)")
                         return
                     }
                     var diagnostics_client: diagnostics_relay_client_t?
                     diagnostics_relay_client_new(device, lkd_service, &diagnostics_client)
                     guard let diagnostics_client else {
-                        print("[错误] 诊断服务创建失败")
+                        print("ERROR: failed to create diagnostic service")
                         return
                     }
                     if diagnostics_relay_restart(diagnostics_client, DIAGNOSTICS_RELAY_ACTION_FLAG_NONE) != DIAGNOSTICS_RELAY_E_SUCCESS {
-                        print("[错误] 设备重启指令发送失败")
+                        print("ERROR: Failed to reboot device")
                     }
                     diagnostics_relay_goodbye(diagnostics_client)
                     diagnostics_relay_client_free(diagnostics_client)
@@ -313,7 +313,7 @@ private func read_plist_to_binary_data(plist: plist_t?) -> Data? {
     defer { free(buf) }
     var len: UInt32 = 0
     guard plist_to_bin(plist, &buf, &len) == PLIST_ERR_SUCCESS,
-          let buf,
+          let buf，
           len > 0
     else { return nil }
     return Data(bytes: buf, count: Int(len))
