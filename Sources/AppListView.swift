@@ -1,39 +1,6 @@
 import SwiftUI
 
-struct ToastModifier: ViewModifier {
-    @Binding var showToast: Bool
-    let message: String
-    
-    func body(content: Content) -> some View {
-        content
-            .overlay(
-                Group {
-                    if showToast {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                Text(message)
-                                    .padding()
-                                    .background(Color.black.opacity(0.7))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                        }
-                        .transition(.slide)
-                        .animation(.easeInOut(duration: 0.3), value: showToast)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                self.showToast = false
-                            }
-                        }
-                    }
-                },
-                alignment: .bottom
-            )
-    }
-}
+
 
 extension View {
     func toast(isPresented: Binding<Bool>, message: String) -> some View {
@@ -79,7 +46,40 @@ struct AppItemView: View {
         .toast(isPresented: $showToast, message: "路径已复制！")
       }
    }
-
+struct ToastModifier: ViewModifier {
+    @Binding var showToast: Bool
+    let message: String
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                Group {
+                    if showToast {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Text(message)
+                                    .padding()
+                                    .background(Color.black.opacity(0.7))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                        }
+                        .transition(.slide)
+                        .animation(.easeInOut(duration: 0.3), value: showToast)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                self.showToast = false
+                            }
+                        }
+                    }
+                },
+                alignment: .bottom
+            )
+    }
+}
 struct AppListView: View {
     @State var apps: [String : AnyCodable] = [:]
     @State var searchString: String = ""
