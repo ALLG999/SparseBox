@@ -79,15 +79,15 @@ struct LogView: View {
                 "-n", "restore", "--no-reboot", "--system",
                 documentsDirectory.path(percentEncoded: false)
             ]
-            print("正在执行参数: \(restoreArgs)")
+            print("Executing args: \(restoreArgs)")
             var argv = restoreArgs.map{ strdup($0) }
             let result = idevicebackup2_main(Int32(restoreArgs.count), &argv)
-            print("设备备份2退出并显示代码 \(result)")
+            print("idevicebackup2 已退出，代码为 \(result)")
             
             log.append("\n")
             if log.contains("域名不能包含斜杠") {
                 log.append("结果：不支持该iOS版本。")
-            } else if log.contains("故意撞车") || result == 0 {
+            } else if log.contains("crash_on_purpose") || result == 0 {
                 log.append("结果：恢复成功。")
                 if willReboot {
                     isRebooting.toggle()
