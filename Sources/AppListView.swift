@@ -1,16 +1,7 @@
 import SwiftUI
 
-
-
-extension View {
-    func toast(isPresented: Binding<Bool>, message: String) -> some View {
-        self.modifier(ToastModifier(showToast: isPresented, message: message))
-    }
-}
-
 struct AppItemView: View {
     let appDetails: [String : AnyCodable]
-    @State private var showToast: Bool = false
     var body: some View {
         Form {
             Section {
@@ -22,19 +13,15 @@ struct AppItemView: View {
                 }
             }
             Section {
-                if let bundlePath = appDetails["Path"]
-                {
+                if let bundlePath = appDetails["Path"] {
                     Button("复制应用程序包文件夹") {
                         UIPasteboard.general.string = "file://a\(bundlePath)"
-                        showToast = true
                     }
                 }
 
-                if let containerPath = appDetails["Container"]
-                {
+                if let containerPath = appDetails["Container"] {
                     Button("复制应用程序数据文件夹") {
                         UIPasteboard.general.string = "file://a\(containerPath)"
-                        showToast = true
                     }
                 }
             } header: {
@@ -43,57 +30,10 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
            }
         }
-        .navigationTitle("应用详情")
-        .navigationBarTitleDisplayMode(.inline)
-        .toast(isPresented: $showToast, message: "路径已复制！")
       }
    }
-struct ToastModifier: ViewModifier {
-    @Binding var showToast: Bool
-    let message: String
-    
-    func body(content: Content) -> some View {
-        ZStack {
-            content
-            
-            if showToast {
-                VStack {
-                    Spacer()
-                    Text(message)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(Color.black.opacity(0.8))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .transition(.opacity)
-                        .frame(maxWidth: .infinity)
-                        .padding(.bottom, 50)
-                }
-                .zIndex(1)
-                .animation(.easeInOut(duration: 0.2), value: showToast)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        withAnimation {
-                            self.showToast = false
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-struct AppListView: View {
-    @State var apps: [String : AnyCodable] = [:]
-    @State var searchString: String = ""
-    var results: [String] {
-        Array(searchString.isEmpty ? apps.keys : apps.filter {
-            let appDetails = $0.value.value as? [String: AnyCodable]
-            let appName = (appDetails!["CFBundleName"]?.value as! String?)!
-            let appPath = (appDetails!["Path"]?.value as! String?)!
-            return appName.contains(searchString) || appPath.contains(searchString)
-        }.keys)
-    }
-    var body: some View {
+
+var body: some View {
         List {
             ForEach(results, id: \.self) { bundleID in
                 let value = apps[bundleID]
