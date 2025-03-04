@@ -43,6 +43,8 @@ struct AppItemView: View {
                 Text("复制路径后，打开“设置”，粘贴到搜索栏，再次选择全部，点击“共享”。\n\n仅支持iOS 18.2b1往下版本。对于这个漏洞，文件夹只能通过AirDrop共享。如果你正在分享App Store应用，请注意它仍将保持加密状态。")
            }
         }
+        .navigationTitle("应用详情")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(isPresented: $showToast, message: "路径已复制！")
       }
    }
@@ -51,33 +53,33 @@ struct ToastModifier: ViewModifier {
     let message: String
     
     func body(content: Content) -> some View {
-        content
-            .overlay(
-                Group {
-                    if showToast {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                Text(message)
-                                    .padding()
-                                    .background(Color.black.opacity(0.7))
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                        }
-                        .transition(.slide)
-                        .animation(.easeInOut(duration: 0.3), value: showToast)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                self.showToast = false
-                            }
+        ZStack {
+            content
+            
+            if showToast {
+                VStack {
+                    Spacer()
+                    Text(message)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(Color.black.opacity(0.8))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .transition(.opacity)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 50)
+                }
+                .zIndex(1)
+                .animation(.easeInOut(duration: 0.2), value: showToast)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        withAnimation {
+                            self.showToast = false
                         }
                     }
-                },
-                alignment: .bottom
-            )
+                }
+            }
+        }
     }
 }
 struct AppListView: View {
